@@ -162,7 +162,7 @@ composer test
 ```
 
 ## 🧪 Compatibility
-* Laravel 10.x, 11.x, 12.x
+* Laravel 11.x, 12.x
 * PHP 8.3+
 
 ## License
