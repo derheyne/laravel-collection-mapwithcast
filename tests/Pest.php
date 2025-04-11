@@ -9,5 +9,16 @@ uses(TestCase::class)->in(__DIR__);
 
 
 class ChildFluent extends Fluent {}
+
 class ChildStringable extends Stringable {}
+
 class ChildCollection extends Collection {}
+
+class UnableToCastClass {}
+
+class CustomDataObject
+{
+    public function __construct(
+        public string $value,
+    ) {}
+}
