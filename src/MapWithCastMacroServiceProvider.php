@@ -2,7 +2,7 @@
 
 namespace dhy\LaravelMapWithCastMacro;
 
-use dhy\LaravelMapWithCastMacro\Macro\MapWithCastMacro;
+use dhy\LaravelMapWithCastMacro\Mixin\MapWithCastMixin;
 use Illuminate\Support\Collection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -18,6 +18,6 @@ class MapWithCastMacroServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        Collection::macro(name: 'mapWithCast', macro: app(MapWithCastMacro::class)());
+        Collection::mixin(new MapWithCastMixin);
     }
 }

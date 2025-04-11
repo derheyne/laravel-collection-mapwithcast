@@ -1,18 +1,17 @@
 <?php
 
-namespace dhy\LaravelMapWithCastMacro\Macro;
+namespace dhy\LaravelMapWithCastMacro\Mixin;
 
 use dhy\LaravelMapWithCastMacro\Contract\Caster;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 
-class MapWithCastMacro
+class MapWithCastMixin
 {
-    public function __invoke(): callable
+    public function mapWithCast(): callable
     {
         return function (callable $callback, ?callable $caster = null) {
             $expectedType = Arr::first((new ReflectionFunction($callback))->getParameters())->getType();
