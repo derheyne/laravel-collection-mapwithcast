@@ -4,11 +4,13 @@ namespace dhy\LaravelMapWithCastMacro\Mixin;
 
 use dhy\LaravelMapWithCastMacro\Contract\Caster;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 
+/** @mixin Collection */
 class MapWithCastMixin
 {
     public function mapWithCast(): callable
