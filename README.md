@@ -1,83 +1,166 @@
-# This is my package laravel-collection-mapwithcast
+# Laravel Collection Macro: `mapWithCast`
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/derheyne/laravel-collection-mapwithcast.svg?style=flat-square)](https://packagist.org/packages/derheyne/laravel-collection-mapwithcast)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/derheyne/laravel-collection-mapwithcast/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/derheyne/laravel-collection-mapwithcast/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/derheyne/laravel-collection-mapwithcast/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/derheyne/laravel-collection-mapwithcast/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/derheyne/laravel-collection-mapwithcast.svg?style=flat-square)](https://packagist.org/packages/derheyne/laravel-collection-mapwithcast)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-collection-mapwithcast.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-collection-mapwithcast)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require derheyne/laravel-collection-mapwithcast
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-collection-mapwithcast-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-collection-mapwithcast-config"
-```
-
-This is the contents of the published config file:
+Automatically cast values in Laravel collections when using `mapWithCast` with typed closures.
 
 ```php
+collect([['name' => 'John'], ['name' => 'Jane']])
+    ->mapWithCast(fn (Fluent $data) => $data->name)
+
+// Result: ['John', 'Jane']
+```
+
+## 📦 About
+
+`mapWithCast` is a Laravel collection macro that enhances the map method by automatically casting each item in the
+collection to the type hinted in your closure. It saves you from manual casting and enforces better type safety, making
+your code cleaner and more expressive.
+
+It supports both **scalar types** like `int` and `string` and complex Laravel-specific types like `Collection`, `Fluent`, and
+`Stringable`.
+
+## 🚀 Installation
+Install the package via Composer:
+
+```shell
+composer require derheyne/laravel-map-with-cast
+```
+
+The macro will be automatically registered thanks to Laravel's package discovery.
+
+## 🧠 Type Support
+
+### ✅ Supported Types (Out of the Box)
+
+* `int`
+* `float`
+* `bool`
+* `string`
+* `array`
+* `object`
+* `\Illuminate\Support\Collection`
+* `\Illuminate\Support\Fluent`
+* `\Illuminate\Support\Stringable`
+
+### ⚙️ Extending with Custom Casters
+Need to handle your own types or custom logic? You can register additional casters by publishing the config file:
+
+```shell
+php artisan vendor:publish --tag=laravel-collection-mapwithcast-config
+```
+
+This will create a config file where you can specify your own custom casters:
+
+```php
+// config/mapwithcast.php
+
 return [
+    'casters' => [
+        dhy\LaravelMapWithCastMacro\Caster\SpatieLaravelDataCaster::class
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
+```php
+namespace App\Casters;
 
-```bash
-php artisan vendor:publish --tag="laravel-collection-mapwithcast-views"
+use dhy\LaravelMapWithCastMacro\Contract\Caster;
+use Spatie\LaravelData\Data;
+
+class SpatieLaravelDataCaster implements Caster
+{
+    public function qualifies(mixed $type): bool
+    {
+        if (! is_string($type)) {
+            return false;
+        }
+
+        return is_subclass_of(object_or_class: $type, class: Data::class, allow_string: true);
+    }
+
+    /** @param  Data  $type */
+    public function cast(mixed $value, mixed $type): Data
+    {
+        return $type::from($value);
+    }
+}
 ```
 
-## Usage
+Now you can automatically cast the value into the specified laravel-data DTO:
 
 ```php
-$laravelCollectionMapwithcast = new dhy\LaravelCollectionMapwithcast();
-echo $laravelCollectionMapwithcast->echoPhrase('Hello, dhy!');
+use Spatie\LaravelData\Data;
+
+class CustomerData extends Data {
+    public function __construct(
+        public string $prename,
+        public string $surname,
+        public string $city,
+    ) {}   
+}
+collect([['prename' => 'Jane', 'surname' => 'Doe', 'city' => 'New York']])
+    ->mapWithCast(fn (CustomerData $customer) => $customer->prename.' '.$customer->surname)
+
+// Returns: ['Jane Doe']
 ```
 
-## Testing
+## 📚 Examples
+### 🧮 Convert and Process Numbers
 
-```bash
+```php
+$totals = collect(['10.50', '20.75', '30'])
+    ->mapWithCast(fn (float $price) => $price * 1.2);
+
+// Result: [12.6, 24.9, 36.0]
+```
+
+### 🧠 Cast to Laravel `Collection`
+
+```php
+$sums = collect([[1, 2, 3], [4, 5, 6]])
+    ->mapWithCast(fn (Collection $items) => $items->sum());
+
+// Result: [6, 15]
+```
+
+### 🔄 Cast to Stringable
+
+```php
+$slugs = collect(['Laravel Tips', 'PHP Tricks'])
+    ->mapWithCast(fn (Stringable $str) => $str->slug());
+
+// Result: ['laravel-tips', 'php-tricks']
+```
+
+### 🪡 Cast by specifying a custom caster
+
+```php
+class CustomDataObject
+{
+    public function __construct(
+        public string $value,
+    ) {}
+}
+
+collect(['one', 'two', 'three'])
+    ->mapWithCast(
+        callback: fn (CustomDataObject $value) => 'Value: '.$value->value,
+        caster: fn ($value, $type) => new $type($value),
+    );
+
+// Return ['Value: one', 'Value: two', 'Value: three']
+```
+
+### ✅ Testing
+
+```shell
 composer test
 ```
 
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Daniel Heyne](https://github.com/dhy)
-- [All Contributors](../../contributors)
+## 🧪 Compatibility
+* Laravel 10.x, 11.x, 12.x
+* PHP 8.3+
 
 ## License
 
