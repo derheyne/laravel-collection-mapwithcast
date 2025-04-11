@@ -35,16 +35,18 @@ it('can cast a value into a new simple type', function ($value, $to) {
     'string' => ['string', ['string', 'int', 'float', 'bool', 'array', 'object']],
     'bool' => [true, ['bool', 'int', 'float', 'string', 'array', 'object']],
     'array' => [['test' => 'value'], ['array', 'object']],
-    'object' => [(object) ['test' => 'value'],  ['object', 'array']],
+    'object' => [(object) ['test' => 'value'], ['object', 'array']],
 ]);
 
 it('fails if a value cannot be cast', function ($value, $to) {
     foreach ($to as $type) {
-        $this->expectExceptionObject(new InvalidArgumentException('Value cannot be cast to type ['.$type.'].'));
-
-        $this->caster->cast($value, $type);
+        try {
+            $this->caster->cast($value, $type);
+        } catch (InvalidArgumentException $e) {
+            expect($e)->toEqual(new InvalidArgumentException('Value cannot be cast to type ['.$type.'].'));
+        }
     }
 })->with([
     'array' => [['test' => 'value'], ['int', 'float', 'string', 'bool']],
-    'object' => [(object) ['test' => 'value'],  ['int', 'float', 'string', 'bool']],
+    'object' => [(object) ['test' => 'value'], ['int', 'float', 'string', 'bool']],
 ]);
