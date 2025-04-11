@@ -1,8 +1,12 @@
 <?php
 
+use Carbon\Carbon;
+use Illuminate\Support\Carbon as LaravelCarbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Optional;
 use Illuminate\Support\Stringable;
+use Illuminate\Support\Uri;
 
 it('retains native functionality if not type was specified', function () {
     $arr = [1, 2, 3];
@@ -40,6 +44,30 @@ it('can cast to stringable', function () {
     expect(collect(['one', 'two', 'three']))
         ->mapWithCast(fn (Stringable $value) => $value)
         ->toContainOnlyInstancesOf(Stringable::class);
+});
+
+it('can cast to carbon', function () {
+    expect(collect(['2025-03-15 12:30:45', '2024-06-25 15:45:00', '2023-09-30 18:00:15']))
+        ->mapWithCast(fn (Carbon $value) => $value)
+        ->toContainOnlyInstancesOf(Carbon::class);
+});
+
+it('can cast to Laravel carbon', function () {
+    expect(collect(['2025-03-15 12:30:45', '2024-06-25 15:45:00', '2023-09-30 18:00:15']))
+        ->mapWithCast(fn (LaravelCarbon $value) => $value)
+        ->toContainOnlyInstancesOf(LaravelCarbon::class);
+});
+
+it('can cast to optional', function () {
+    expect(collect([['key' => 'value'], (object) ['key' => 'value']]))
+        ->mapWithCast(fn (Optional $value) => $value)
+        ->toContainOnlyInstancesOf(Optional::class);
+});
+
+it('can cast to uri', function () {
+    expect(collect(['https://example.com', Uri::of('https://google.com')->getUri(), str('https://php.net')]))
+        ->mapWithCast(fn (Uri $value) => $value)
+        ->toContainOnlyInstancesOf(Uri::class);
 });
 
 it('can pass the index to the callback', function () {
