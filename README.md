@@ -39,12 +39,12 @@ The macro will be automatically registered thanks to Laravel's package discovery
 * `string`
 * `array`
 * `object`
-* `\Illuminate\Support\Carbon` and `Carbon\Carbon`
-* `\Illuminate\Support\Collection`
-* `\Illuminate\Support\Fluent`
-* `\Illuminate\Support\Optional`
-* `\Illuminate\Support\Stringable`
-* `\Illuminate\Support\Uri`
+* `Illuminate\Support\Carbon` and `Carbon\Carbon`
+* `Illuminate\Support\Collection`
+* `Illuminate\Support\Fluent`
+* `Illuminate\Support\Optional`
+* `Illuminate\Support\Stringable`
+* `Illuminate\Support\Uri`
 
 ### ⚙️ Extending with Custom Casters
 Need to handle your own types or custom logic? You can register additional casters by publishing the config file:
@@ -60,7 +60,7 @@ This will create a config file where you can specify your own custom casters:
 
 return [
     'casters' => [
-        dhy\LaravelMapWithCastMacro\Caster\SpatieLaravelDataCaster::class
+        App\Caster\SpatieLaravelDataCaster::class
     ],
 ];
 ```
