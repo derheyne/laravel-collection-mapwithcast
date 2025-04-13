@@ -1,6 +1,6 @@
 {
     "name": "derheyne/laravel-collection-mapwithcast",
-    "description": "This is my package laravel-collection-mapwithcast",
+    "description": "Automatically cast values in Laravel collections when using mapWithCast with typed closures.",
     "keywords": [
         "Daniel Heyne",
         "laravel",
