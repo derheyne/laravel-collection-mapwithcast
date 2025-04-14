@@ -18,11 +18,16 @@ class SimpleTypeCaster implements Caster
     public function cast(mixed $value, mixed $type): mixed
     {
         try {
-            settype(var: $value, type: $type);
+            return match ($type) {
+                'string' => (string) $value,
+                'int' => (int) $value,
+                'float' => (float) $value,
+                'bool' => (bool) $value,
+                'array' => (array) $value,
+                'object' => (object) $value,
+            };
         } catch (Throwable) {
             throw new InvalidArgumentException('Value cannot be cast to type ['.$type.'].');
         }
-
-        return $value;
     }
 }
