@@ -27,6 +27,7 @@
         "pestphp/pest": "^2.36||^3.8",
         "pestphp/pest-plugin-arch": "^2.7||^3.1",
         "pestphp/pest-plugin-laravel": "^2.4||^3.1",
+        "phpbench/phpbench": "^1.4",
         "spatie/laravel-ray": "^1.35"
     },
     "autoload": {
@@ -46,7 +47,8 @@
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "benchmark" : "vendor/bin/phpbench run --filter=MapWithCastBench --report=default"
     },
     "config": {
         "sort-packages": true,
