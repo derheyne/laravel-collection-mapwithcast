@@ -43,7 +43,9 @@ it('fails if a value cannot be cast', function ($value, $to) {
         try {
             $this->caster->cast($value, $type);
         } catch (InvalidArgumentException $e) {
-            expect($e)->toEqual(new InvalidArgumentException('Value cannot be cast to type ['.$type.'].'));
+            expect($e)
+                ->getMessage()->toBe('Value cannot be cast to type ['.$type.'].')
+                ->getPrevious()->toBeInstanceOf(Throwable::class);
         }
     }
 })->with([

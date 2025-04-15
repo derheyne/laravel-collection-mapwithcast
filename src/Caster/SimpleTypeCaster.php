@@ -3,8 +3,9 @@
 namespace dhy\LaravelMapWithCastMacro\Caster;
 
 use dhy\LaravelMapWithCastMacro\Contract\Caster;
+use Error;
+use ErrorException;
 use InvalidArgumentException;
-use Throwable;
 
 class SimpleTypeCaster implements Caster
 {
@@ -26,8 +27,11 @@ class SimpleTypeCaster implements Caster
                 'array' => (array) $value,
                 'object' => (object) $value,
             };
-        } catch (Throwable) {
-            throw new InvalidArgumentException('Value cannot be cast to type ['.$type.'].');
+        } catch (ErrorException|Error $exception) {
+            throw new InvalidArgumentException(
+                message: 'Value cannot be cast to type ['.$type.'].',
+                previous: $exception,
+            );
         }
     }
 }
