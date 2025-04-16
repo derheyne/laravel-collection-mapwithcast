@@ -57,7 +57,7 @@ class MapWithCastBench
         ));
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpScalar')]
+    #[Bench\BeforeMethods(['setUp', 'setUpScalar'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_scalar_mapWithCast(): void
@@ -65,7 +65,7 @@ class MapWithCastBench
         $this->data->mapWithCast(fn (string $value) => $value);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpScalar')]
+    #[Bench\BeforeMethods(['setUp', 'setUpScalar'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_scalar_map(): void
@@ -73,7 +73,7 @@ class MapWithCastBench
         $this->data->map(fn (int $value, int $index) => (string) $value);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpScalar')]
+    #[Bench\BeforeMethods(['setUp', 'setUpScalar'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_scalar_intermediate_map(): void
@@ -83,7 +83,7 @@ class MapWithCastBench
             ->map(fn (string $value, int $index) => $value);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpUri')]
+    #[Bench\BeforeMethods(['setUp', 'setUpUri'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_uri_mapWithCast(): void
@@ -91,7 +91,7 @@ class MapWithCastBench
         $this->data->mapWithCast(fn (Uri $uri) => $uri->fragment());
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpUri')]
+    #[Bench\BeforeMethods(['setUp', 'setUpUri'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_uri_map(): void
@@ -99,7 +99,7 @@ class MapWithCastBench
         $this->data->map(fn (string $value, int $index) => Uri::of($value)->fragment());
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpUri')]
+    #[Bench\BeforeMethods(['setUp', 'setUpUri'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_uri_intermediate_map(): void
@@ -109,7 +109,7 @@ class MapWithCastBench
             ->map(fn (Uri $uri, int $index) => $uri->fragment());
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpFluent')]
+    #[Bench\BeforeMethods(['setUp', 'setUpFluent'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_fluent_mapWithCast(): void
@@ -117,7 +117,7 @@ class MapWithCastBench
         $this->data->mapWithCast(fn (Fluent $fluent) => $fluent->key);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpFluent')]
+    #[Bench\BeforeMethods(['setUp', 'setUpFluent'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_fluent_map(): void
@@ -125,7 +125,7 @@ class MapWithCastBench
         $this->data->map(fn (array $value, int $index) => fluent($value)->key);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpFluent')]
+    #[Bench\BeforeMethods(['setUp', 'setUpFluent'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_fluent_intermediate_map(): void
@@ -135,7 +135,7 @@ class MapWithCastBench
             ->map(fn (Fluent $fluent, int $index) => $fluent->key);
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpCarbon')]
+    #[Bench\BeforeMethods(['setUp', 'setUpCarbon'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_carbon_mapWithCast(): void
@@ -143,7 +143,7 @@ class MapWithCastBench
         $this->data->mapWithCast(fn (Carbon $carbon) => $carbon->toDateTimeString());
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpCarbon')]
+    #[Bench\BeforeMethods(['setUp', 'setUpCarbon'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_carbon_map(): void
@@ -151,7 +151,7 @@ class MapWithCastBench
         $this->data->map(fn (string $value, int $index) => (new Carbon($value))->toDateTimeString());
     }
 
-    #[Bench\BeforeMethods('setUp', 'setUpCarbon')]
+    #[Bench\BeforeMethods(['setUp', 'setUpCarbon'])]
     #[Bench\Revs(10)]
     #[Bench\Iterations(1)]
     public function bench_carbon_intermediate_map(): void
