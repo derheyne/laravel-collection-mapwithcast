@@ -24,7 +24,7 @@ It supports both **scalar types** like `int` and `string` and complex Laravel-sp
 Install the package via Composer:
 
 ```shell
-composer require derheyne/laravel-map-with-cast
+composer require derheyne/laravel-collection-mapwithcast
 ```
 
 The macro will be automatically registered thanks to Laravel's package discovery.
