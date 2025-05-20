@@ -19,12 +19,13 @@ jobs:
         os: [ubuntu-latest]
         php: [8.4, 8.3]
         laravel: [12.*, 11.*]
-        stability: [prefer-stable]
+        stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 12.*
             testbench: 10.*
           - laravel: 11.*
-            testbench: 9.*
+            # prefer-lowest fails if we do not use one of the newer versions
+            testbench: ^9.14
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
